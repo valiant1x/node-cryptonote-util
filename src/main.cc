@@ -123,7 +123,7 @@ NAN_METHOD(convert_blob_fa) {
     //convert
     block b = AUTO_VAL_INIT(b);
     if (!parse_and_validate_block_from_blob(input, b))
-        return THROW_ERROR_EXCEPTION("Failed to parse block");
+        return THROW_ERROR_EXCEPTION("Failed to parse block FA");
 
      else {
         block parent_block;
@@ -229,7 +229,7 @@ void construct_block_blob_fa(const Nan::FunctionCallbackInfo<v8::Value>& info) {
         return THROW_ERROR_EXCEPTION("Failed to parse block");
 
     b.nonce = nonce;
-    if (b.major_version == BLOCK_MAJOR_VERSION_2) {
+    if (b.major_version >= BLOCK_MAJOR_VERSION_2) {
         block parent_block;
         b.parent_block.nonce = nonce;
         if (!construct_parent_block(b, parent_block))
@@ -364,9 +364,9 @@ void address_decode_integrated(const Nan::FunctionCallbackInfo<v8::Value>& info)
 
 
 NAN_MODULE_INIT(init) {
-    Nan::Set(target, Nan::New("construct_block_blob").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(construct_block_blob)).ToLocalChecked());
+    Nan::Set(target, Nan::New("construct_block_blob").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(construct_block_blob_fa)).ToLocalChecked());
     Nan::Set(target, Nan::New("get_block_id").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(get_block_id)).ToLocalChecked());
-    Nan::Set(target, Nan::New("convert_blob").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(convert_blob)).ToLocalChecked());
+    Nan::Set(target, Nan::New("convert_blob").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(convert_blob_fa)).ToLocalChecked());
     Nan::Set(target, Nan::New("convert_blob_bb").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(convert_blob_bb)).ToLocalChecked());
     Nan::Set(target, Nan::New("address_decode").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(address_decode)).ToLocalChecked());
     Nan::Set(target, Nan::New("address_decode_integrated").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(address_decode_integrated)).ToLocalChecked());
