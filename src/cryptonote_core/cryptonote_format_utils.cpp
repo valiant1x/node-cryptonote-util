@@ -705,6 +705,15 @@ namespace cryptonote
     if (!get_block_hashing_blob(b, blob))
       return false;
 
+    if (BLOCK_MAJOR_VERSION_2 <= b.major_version)
+    {
+      blobdata parent_blob;
+      auto sbb = make_serializable_bytecoin_block(b, true, false);
+      if (!t_serializable_object_to_blob(sbb, parent_blob))
+        return false;
+      blob.append(parent_blob);
+    }
+
     return get_object_hash(blob, res);
   }
   //---------------------------------------------------------------
@@ -737,7 +746,7 @@ namespace cryptonote
     std::string hex_tx_represent = string_tools::buff_to_hex_nodelimer(txb);
 
     //hard code coinbase tx in genesis block, because "tru" generating tx use random, but genesis should be always the same
-    std::string genesis_coinbase_tx_hex = "013c01ff0001ffffffffffff03029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
+    std::string genesis_coinbase_tx_hex = "013c01ff0001af9ea896c605029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd0880712101e444827ebec7bfe1938c8505128cbcf59343e9651afb0893d3d664f560fd216f";
 
     blobdata tx_bl;
     string_tools::parse_hexstr_to_binbuff(genesis_coinbase_tx_hex, tx_bl);
@@ -935,6 +944,11 @@ namespace cryptonote
   //---------------------------------------------------------------
   bool check_proof_of_work(const block& bl, difficulty_type current_diffic, crypto::hash& proof_of_work)
   {
+    switch (bl.major_version)
+    {
+    case BLOCK_MAJOR_VERSION_1: return check_proof_of_work_v1(bl, current_diffic, proof_of_work);
+    case BLOCK_MAJOR_VERSION_2: return check_proof_of_work_v2(bl, current_diffic, proof_of_work);
+    }
   }
   //---------------------------------------------------------------
 }
