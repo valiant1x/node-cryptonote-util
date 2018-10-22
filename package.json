@@ -1,10 +1,10 @@
 {
   "name": "intensecoin-util",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "cryptonote",
   "author": {
-    "name": "LucasJones",
-    "email": "lucasjonesdev@hotmail.co.uk"
+    "name": "Valiant",
+    "email": "valiant@lethean.io"
   },
   "repository": {
     "type": "git",
