@@ -944,14 +944,12 @@ namespace cryptonote
   bool check_proof_of_work(const block& bl, difficulty_type current_diffic, crypto::hash& proof_of_work)
   {
     switch (bl.major_version)
-    {
-    case BLOCK_MAJOR_VERSION_1: 
-    case BLOCK_MAJOR_VERSION_4:
-    case BLOCK_MAJOR_VERSION_5:
-      return check_proof_of_work_v1(bl, current_diffic, proof_of_work);
+    {    
     case BLOCK_MAJOR_VERSION_2: 
     case BLOCK_MAJOR_VERSION_3:
         return check_proof_of_work_v2(bl, current_diffic, proof_of_work);
+    default:
+      return check_proof_of_work_v1(bl, current_diffic, proof_of_work);
     }
   }
   //---------------------------------------------------------------
